@@ -1,0 +1,138 @@
+@import "tailwindcss";
+
+@theme {
+  --color-cyan: #00FFFF;
+  --color-magenta: #FF00FF;
+  --color-yellow: #FFFF00;
+  --font-pixel: "Press Start 2P", monospace;
+  --font-sys: "VT323", monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-black text-cyan antialiased;
+    font-family: "VT323", monospace;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap');
+
+/* Static Noise Overlay */
+.static-noise {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* CRT Scanlines */
+.scanlines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.25));
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 40;
+}
+
+/* Screen Tear Animation */
+@keyframes tear {
+  0% { transform: translateX(0); }
+  20% { transform: translateX(-4px) skewX(2deg); }
+  21% { transform: translateX(4px) skewX(-2deg); }
+  22% { transform: translateX(0) skewX(0); }
+  80% { transform: translateX(0); }
+  81% { transform: translateX(6px); }
+  82% { transform: translateX(-3px); }
+  83% { transform: translateX(0); }
+  100% { transform: translateX(0); }
+}
+
+.screen-tear {
+  animation: tear 5s infinite;
+}
+
+/* Glitch Text Effect */
+.glitch-text {
+  position: relative;
+  display: inline-block;
+  color: var(--color-cyan);
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: black;
+}
+
+.glitch-text::before {
+  left: 3px;
+  text-shadow: -2px 0 var(--color-magenta);
+  clip-path: inset(45% 0 45% 0);
+  animation: glitch-anim-1 2.5s infinite linear alternate-reverse;
+}
+
+.glitch-text::after {
+  left: -3px;
+  text-shadow: -2px 0 var(--color-yellow), 2px 2px var(--color-magenta);
+  animation: glitch-anim-2 3s infinite linear alternate-reverse;
+}
+
+@keyframes glitch-anim-1 {
+  0% { clip-path: inset(20% 0 80% 0); }
+  20% { clip-path: inset(60% 0 10% 0); }
+  40% { clip-path: inset(40% 0 50% 0); }
+  60% { clip-path: inset(80% 0 5% 0); }
+  80% { clip-path: inset(10% 0 70% 0); }
+  100% { clip-path: inset(30% 0 20% 0); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { clip-path: inset(10% 0 60% 0); }
+  20% { clip-path: inset(30% 0 20% 0); }
+  40% { clip-path: inset(70% 0 10% 0); }
+  60% { clip-path: inset(20% 0 50% 0); }
+  80% { clip-path: inset(90% 0 5% 0); }
+  100% { clip-path: inset(50% 0 30% 0); }
+}
+
+/* UI Borders */
+.border-glitch {
+  border: 2px solid var(--color-cyan);
+  box-shadow: 4px 4px 0 var(--color-magenta);
+}
+
+.border-glitch:hover {
+  border-color: var(--color-magenta);
+  box-shadow: -4px -4px 0 var(--color-cyan);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+  border-left: 1px solid var(--color-cyan);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-magenta);
+}
+
